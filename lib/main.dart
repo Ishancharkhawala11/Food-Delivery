@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:zometo/Admin/Admmin_pannel.dart';
 import 'package:zometo/Pages/Onboarding.dart';
 import 'package:zometo/Pages/Sign_up.dart';
 
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:const OnBoarding(),
+      home:OnBoarding(),
     );
   }
 }

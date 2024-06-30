@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:random_string/random_string.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zometo/Pages/BottomNav.dart';
 import 'package:zometo/Pages/Home.dart';
 import 'package:zometo/Pages/Login.dart';
+import 'package:zometo/service/database.dart';
 
 import '../Widgets/Support_widget.dart';
+import '../service/Shred_prefernce.dart';
 
 class Sign_up extends StatefulWidget {
   const Sign_up({super.key});
@@ -32,6 +36,18 @@ class _Sign_upState extends State<Sign_up> {
             fontSize: 20,
           ),
         )));
+        String id=randomAlphaNumeric(10);
+        Map<String,dynamic> addUserInfo={
+          "Name":Name.text,
+          "Email":Email.text,
+          "Wallet":"0",
+          "Id":id,
+        };
+        await databaseMethods().addUserDetails(addUserInfo, id);
+        await shared_pref_method().saveUserName(Name.text);
+        await shared_pref_method().saveUserEmail(Email.text);
+        await shared_pref_method().saveUserId(id);
+        await shared_pref_method().saveUserWallet("0");
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BottomNav()));
       } on FirebaseException catch (e) {
         if (e.code == 'weak-password') {

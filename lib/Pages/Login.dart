@@ -15,36 +15,42 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   String email = "", password = "";
-  TextEditingController Email = new TextEditingController();
-  TextEditingController Password = new TextEditingController();
+  TextEditingController Email = TextEditingController();
+  TextEditingController Password = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   void showCustomSnackBar(String message, Color backgroundColor) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(
-        message,
-        style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-      backgroundColor: backgroundColor,
-    ));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+        backgroundColor: backgroundColor,
+      ));
+    }
   }
 
-  UserLogin() async {
+  Future<void> UserLogin() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       // Navigate to BottomNav on successful login
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNav()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => BottomNav()),
+        );
+      }
     } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
+      if (e.code == 'user-not-found') {
         showCustomSnackBar("User not Found", Colors.red);
-      } else if (e.code == "wrong-password") {
+      } else if (e.code == 'wrong-password') {
         showCustomSnackBar("Wrong Password", Colors.orange);
+      } else {
+        showCustomSnackBar("${e.message}", Colors.red);
       }
     }
   }
@@ -100,7 +106,7 @@ class _LoginState extends State<Login> {
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
                         padding: EdgeInsets.only(left: 20, right: 20),
-                        height: MediaQuery.of(context).size.height / 2.2,
+                        height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                           color: Colors.white,

@@ -41,6 +41,10 @@ dependencies:
   cloud_firestore:
   flutter_stripe:
   http:
+  random_string:
+  shared_preferences:
+  image_picker:
+  firebase_storage:
 dev_dependencies:
   flutter_test:
     sdk: flutter
